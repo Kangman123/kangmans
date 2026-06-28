@@ -64,7 +64,7 @@ async function connectToWhatsApp() {
 
 if (!state.creds.registered) {
 
-    const phoneNumber = "6285178369984"; // Ganti dengan nomor Anda jika berubah
+    const phoneNumber = "628xxxxxxxxxx"; // Ganti dengan nomor Anda jika berubah
 
     setTimeout(async () => {
 
@@ -177,6 +177,8 @@ sock.ev.on(
 
 sock.ev.on("messages.upsert", async ({ messages, type }) => {
 
+    console.log("🔥 EVENT messages.upsert DIPANGGIL");
+    console.log(JSON.stringify(messages, null, 2));
     try {
 
         if (type !== "notify") return;
