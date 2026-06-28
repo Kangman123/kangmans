@@ -31,12 +31,12 @@ async function connectToWhatsApp() {
         auth: state,
         browser: Browsers.windows('Chrome'),
     });
-    
-if (!state.creds.registered) {
+        sock.ev.on('connection.update', async (update) => {
+        const { connection, lastDisconnect, qr } = update;
 
-    const phoneNumber = '6285178369984';
-
-    setTimeout(async () => {
+	if (!state.creds.registered) {
+  	  const phoneNumber = '6285178369984';
+	 setTimeout(async () => {
         try {
             const code = await sock.requestPairingCode(phoneNumber);
             console.log('\nPAIRING CODE :', code, '\n');
@@ -50,9 +50,6 @@ if (!state.creds.registered) {
 sock.ev.on('group-participants.update', async (update) => {
     console.log("EVENT GROUP TERDETEKSI:", update);
 });
-
-    sock.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect, qr } = update;
 
         if (qr) {
             console.log('\n🔐 SCAN QR CODE:\n');
@@ -68,13 +65,12 @@ sock.ev.on('group-participants.update', async (update) => {
             if (shouldReconnect) {
                 setTimeout(() => connectToWhatsApp(), 5000);
             }
-        } 
-        else if (connection === 'open') {
+        } else if (connection === 'open') {
             console.log('✅ Bot terhubung!');
         }
     });
 
-        sock.ev.on('creds.update', saveCreds);
+    sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('messages.upsert', async (m) => {
         const msg = m.messages[0];
@@ -101,6 +97,7 @@ sock.ev.on('group-participants.update', async (update) => {
         let dataUser = user[remoteJid];
 
         console.log("Pesan:", pesanMasuk);
+
         // ======================
         // LOKASI
         // ======================
