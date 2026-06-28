@@ -31,6 +31,7 @@ async function connectToWhatsApp() {
         auth: state,
         browser: Browsers.windows('Chrome'),
     });
+    
 if (!state.creds.registered) {
 
     const phoneNumber = '6285178369984';
@@ -49,6 +50,7 @@ if (!state.creds.registered) {
 sock.ev.on('group-participants.update', async (update) => {
     console.log("EVENT GROUP TERDETEKSI:", update);
 });
+
     sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update;
 
@@ -75,15 +77,15 @@ sock.ev.on('group-participants.update', async (update) => {
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on("messages.upsert", async (m) => {
-
+console.log("=== EVENT MASUK ===");
+console.log(JSON.stringify(m, null, 2));
     const msg = m.messages?.[0];
     if (!msg?.message) return;
 
     const remoteJid = msg.key?.remoteJid;
-    if (!remoteJid) return;
+if (!remoteJid) return;
 
-    if (remoteJid.endsWith("@g.us")) return;
-    if (msg.key.fromMe) return;
+if (msg.key.fromMe) return;
 
     if (!user[remoteJid]) {
         user[remoteJid] = {
@@ -105,6 +107,10 @@ sock.ev.on('group-participants.update', async (update) => {
 
     console.log("Pesan:", pesanMasuk);
     console.log("Pesan Masuk Dari:", remoteJid, pesanMasuk);
+    const isGroup = remoteJid.endsWith("@g.us");
+
+console.log("isGroup:", isGroup);
+console.log("participant:", msg.key.participant);
         // ======================
         // LOKASI
         // ======================
