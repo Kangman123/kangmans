@@ -1,3 +1,4 @@
+
 import {
     makeWASocket,
     useMultiFileAuthState,
@@ -11,8 +12,8 @@ import QRCode from "qrcode";
 import tzwhere from "tzwhere";
 import axios from "axios";
 
-import { awalBulan, getHijri, toDMS } from "./commands/hisab.js";
-import { HisabKiblat } from './commands/kiblat.js';
+import { awalBulan, getHijri, toDMS } from './commands/hisab.js';
+import { HisabKiblat ,} from './commands/kiblat.js';
 import { waktuSholatFalak } from './commands/sholat.js';
 import { hitungSelamatan } from './commands/selamatan.js';
 
@@ -29,9 +30,10 @@ async function connectToWhatsApp() {
         version,
         logger: pino({ level: 'silent' }),
         auth: state,
-        browser: Browsers.windows('Chrome'),
+        browser: Browsers.ubuntu('Chrome'),
     });
-        sock.ev.on('connection.update', async (update) => {
+
+    sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update;
 
 	if (!state.creds.registered) {
@@ -46,12 +48,11 @@ async function connectToWhatsApp() {
     }, 3000);
 
 }
-// DEBUG GROUP EVENT
+       // DEBUG GROUP EVENT
 sock.ev.on('group-participants.update', async (update) => {
     console.log("EVENT GROUP TERDETEKSI:", update);
 });
-
-        if (qr) {
+if (qr) {
             console.log('\n🔐 SCAN QR CODE:\n');
             const qrText = await QRCode.toString(qr, { type: 'terminal', small: true });
             console.log(qrText);
@@ -97,7 +98,6 @@ sock.ev.on('group-participants.update', async (update) => {
         let dataUser = user[remoteJid];
 
         console.log("Pesan:", pesanMasuk);
-
         // ======================
         // LOKASI
         // ======================
