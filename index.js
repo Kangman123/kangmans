@@ -64,7 +64,7 @@ async function connectToWhatsApp() {
 
 if (!state.creds.registered) {
 
-    const phoneNumber = "628xxxxxxxxxx"; // Ganti dengan nomor Anda jika berubah
+    const phoneNumber = "6285178369984"; // Ganti dengan nomor Anda jika berubah
 
     setTimeout(async () => {
 
