@@ -74,43 +74,33 @@ sock.ev.on('group-participants.update', async (update) => {
         }
     });
 
-    sock.ev.on('creds.update', saveCreds);
+        sock.ev.on('creds.update', saveCreds);
 
-    sock.ev.on("messages.upsert", async (m) => {
-console.log("=== EVENT MASUK ===");
-console.log(JSON.stringify(m, null, 2));
-    const msg = m.messages?.[0];
-    if (!msg?.message) return;
+    sock.ev.on('messages.upsert', async (m) => {
+        const msg = m.messages[0];
+        if (!msg.message) return;
+        if (msg.key.remoteJid.endsWith('@g.us')) return;
+        if (msg.key.fromMe) return;
 
-    const remoteJid = msg.key?.remoteJid;
-if (!remoteJid) return;
+        const remoteJid = msg.key.remoteJid;
+        const pesanMasuk =
+            msg.message?.conversation ||
+            msg.message?.extendedTextMessage?.text || "";
 
-if (msg.key.fromMe) return;
+        if (!user[remoteJid]) {
+            user[remoteJid] = {
+                namaLokasi: "Belum diatur",
+                LT: -7.5,
+                BT: 112.7,
+                TT: 0,
+                Tz: 7,
+                TzName: "WIB",
+            };
+        }
 
-    if (!user[remoteJid]) {
-        user[remoteJid] = {
-            namaLokasi: "Belum diatur",
-            LT: -7.5,
-            BT: 112.7,
-            TT: 0,
-            Tz: 7,
-            TzName: "WIB",
-        };
-    }
+        let dataUser = user[remoteJid];
 
-    let dataUser = user[remoteJid];
-
-    const pesanMasuk =
-        msg.message?.conversation ||
-        msg.message?.extendedTextMessage?.text ||
-        "";
-
-    console.log("Pesan:", pesanMasuk);
-    console.log("Pesan Masuk Dari:", remoteJid, pesanMasuk);
-    const isGroup = remoteJid.endsWith("@g.us");
-
-console.log("isGroup:", isGroup);
-console.log("participant:", msg.key.participant);
+        console.log("Pesan:", pesanMasuk);
         // ======================
         // LOKASI
         // ======================
